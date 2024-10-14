@@ -9,12 +9,11 @@ DEFAULT_STATE = "TUxVUE1PTjQxN2E4"  # ID del estado (Montevideo)
 DEFAULT_PRICE_RANGE = "13000UYU-18000UYU"  # Rango de precios por defecto
 DEFAULT_CURRENCY = "UYU"
 DEFAULT_PROPERTY_TYPE = "242062,242060"  # Tipos de propiedades: apartamento, casa
-DEFAULT_AREA = "[20-*)"  # Área mínima de 20 m²
+DEFAULT_AREA = "[0-*)"  # Área mínima de 20 m²
 
 # 3. Ciudades permitidas
 WANTED_CITIES = [
     "TUxVQ0xBWjk5YTE5",
-    "TUxVQ1VOSTVkOGFk",
     "TUxVQ0NFTjVjMTM",
     "TUxVQ0NPUjZmZjNm",
     "TUxVQ1BPQzM5ZGRi",
@@ -33,10 +32,7 @@ WANTED_CITIES = [
 ]
 
 # 4. Vendedores bloqueados
-BLOCKED_SELLERS = [
-    579162526,
-    126030388,
-]
+BLOCKED_SELLERS = []
 
 # 5. Parámetros de paginación y limitación de resultados
 DEFAULT_LIMIT = 50  # Cantidad máxima de resultados por solicitud

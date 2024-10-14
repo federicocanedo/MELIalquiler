@@ -3,7 +3,7 @@
 import math
 
 class Apartment:
-    def __init__(self, id, title, city, price, url, attributes, latitude, longitude):
+    def __init__(self, id, title, city, price, url, attributes, latitude = None, longitude=None, created_at=None):
         self.id = id
         self.title = title
         self.city = city
@@ -12,6 +12,7 @@ class Apartment:
         self.attributes = attributes
         self.latitude = latitude
         self.longitude = longitude
+        self.created_at = created_at
 
     def get_maintenance_fee(self):
         fee = self.find_attribute("MAINTENANCE_FEE")
