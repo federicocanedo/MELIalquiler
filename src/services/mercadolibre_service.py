@@ -41,7 +41,8 @@ class MercadoLibreService:
                 # Agregamos los resultados de esta página a la lista total
                 for item in data["results"]:
                     apartment = self.create_apartment(item)
-                    self.filter_apartment(apartment)
+                    if self.filter_apartment(apartment, apartments):
+                        apartments.append(apartment)
                 
                 # Verificamos el número total de resultados y calculamos cuántas páginas hay en total
                 total_results = data["paging"]["total"]
@@ -60,7 +61,7 @@ class MercadoLibreService:
                 print(f"Error en la solicitud: {response.status_code}")
                 break
         
-        return self.filtered_apartments
+        return apartments
 
     def create_apartment(self, item):
         return Apartment(
@@ -74,13 +75,13 @@ class MercadoLibreService:
             longitude=item["location"].get("longitude","")
         )
 
-    def filter_apartment(self, apartment):
+    def filter_apartment(self, apartment, apartments):
         # Filtro por ciudades
         if apartment.city not in self.WANTED_CITIES:
             return False
 
         # Filtro por distancia, precio y área
-        for filtered_apartment in self.filtered_apartments:
+        for filtered_apartment in apartments:
             if (apartment.latitude and apartment.longitude):
                 if (filtered_apartment.latitude and filtered_apartment.longitude and
                     apartment.price == filtered_apartment.price and
@@ -88,9 +89,6 @@ class MercadoLibreService:
                     apartment.distance_to(filtered_apartment) <= 100):
                     # Si hay un apartamento con el mismo precio, misma área y está a menos de 100 metros, lo descartamos
                     return False
-
-        # Si pasa el filtro, lo agregamos a la lista de apartamentos filtrados
-        self.filtered_apartments.append(apartment)
         return True
 
     def get_apartment_details(self, apartment_id):
@@ -116,14 +114,17 @@ class MercadoLibreService:
                 )
                 maintenance_fee = apartment_data.get_maintenance_fee()
                 date_created = datetime.strptime(apartment_data.created_at, "%Y-%m-%dT%H:%M:%S.%fZ")
-                if (maintenance_fee and (maintenance_fee + apartment_data.price) > 18000):
+                if (maintenance_fee and (maintenance_fee + apartment_data.price) > settings.MAX_PRICE):
                     sleep(settings.REQUEST_DELAY)
                     continue
                 # if date_created < self.one_week_ago:
                 #     sleep(settings.REQUEST_DELAY)
                 #     continue
-                self.display_apartment(apartment_data)
+                self.filtered_apartments.append(apartment_data)
             sleep(settings.REQUEST_DELAY)
+        self.filtered_apartments = sorted(self.filtered_apartments, key=lambda x: datetime.strptime(x.created_at, "%Y-%m-%dT%H:%M:%S.%fZ"))
+        for apartment in self.filtered_apartments:
+            self.display_apartment(apartment)
 
     def display_apartment(self, apartment):
         print("-" * 60)

@@ -4,9 +4,11 @@ SEARCH_URL = f"{API_BASE_URL}/sites/MLU/search"
 ITEM_URL = f"{API_BASE_URL}/items/"
 
 # 2. Parámetros de búsqueda por defecto
+MIN_PRICE = 13000
+MAX_PRICE = 19000
 DEFAULT_CATEGORY = "MLU1459"  # Categoría de inmuebles en Uruguay (apartamentos)
 DEFAULT_STATE = "TUxVUE1PTjQxN2E4"  # ID del estado (Montevideo)
-DEFAULT_PRICE_RANGE = "13000UYU-18000UYU"  # Rango de precios por defecto
+DEFAULT_PRICE_RANGE = f"{MIN_PRICE}UYU-{MAX_PRICE}UYU"  # Rango de precios por defecto
 DEFAULT_CURRENCY = "UYU"
 DEFAULT_PROPERTY_TYPE = "242062,242060"  # Tipos de propiedades: apartamento, casa
 DEFAULT_AREA = "[0-*)"  # Área mínima de 20 m²
