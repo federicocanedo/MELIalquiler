@@ -1,5 +1,3 @@
-# src/models/apartment.py
-
 import math
 
 class Apartment:
@@ -36,7 +34,7 @@ class Apartment:
                 return attribute
         return None
 
-    # Método para calcular la distancia entre dos apartamentos utilizando la fórmula de Haversine
+    # Método para calcular la distancia entre dos apartamentos utilizando la fórmula de Haversine (afanado)
     def distance_to(self, other_apartment):
         R = 6371e3  # Radio de la Tierra en metros
         phi1 = math.radians(self.latitude)

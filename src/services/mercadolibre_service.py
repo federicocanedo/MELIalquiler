@@ -28,35 +28,31 @@ class MercadoLibreService:
 
     def search_apartments(self):
         apartments = []
-        total_pages = 5  # Máximo de 5 páginas
+        total_pages = 5
         current_page = 0
         offset = 0
 
         while current_page < total_pages:
-            self.params["offset"] = offset  # Actualizamos el offset en los parámetros
+            self.params["offset"] = offset
             response = requests.get(self.SEARCH_URL, params=self.params)
 
             if response.status_code == 200:
                 data = response.json()
-                # Agregamos los resultados de esta página a la lista total
                 for item in data["results"]:
                     apartment = self.create_apartment(item)
                     if self.filter_apartment(apartment, apartments):
                         apartments.append(apartment)
                 
-                # Verificamos el número total de resultados y calculamos cuántas páginas hay en total
                 total_results = data["paging"]["total"]
                 total_pages = min((total_results // settings.DEFAULT_LIMIT) + 1, 5)
 
                 print(f"Página {current_page + 1}/{total_pages}, Total resultados: {total_results}")
 
-                # Si ya no hay más resultados, terminamos el bucle
                 if len(data["results"]) == 0:
                     break
 
-                # Avanzamos a la siguiente página
                 current_page += 1
-                offset += settings.DEFAULT_LIMIT  # Incrementamos el offset en 50 para la siguiente página
+                offset += settings.DEFAULT_LIMIT
             else:
                 print(f"Error en la solicitud: {response.status_code}")
                 break
